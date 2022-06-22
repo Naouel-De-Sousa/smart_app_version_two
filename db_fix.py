@@ -10,7 +10,13 @@ conn.commit()
 # Functions
 
 def view_all_notes():
-	st.write("""Revolutionizing Our Hard Landing Response Times""")
+	
+	html_temp = """
+        <div style="background-color:#FFA07A;padding:10px;border-radius:10px">
+        <h3 style="color:#FFFFFF;text-align:center;">Revolutionizing Our Hard Landing Response Times </h3>
+		</div>"""
+		
+	st.write(html_temp.format('royalblue','white'),unsafe_allow_html=True)
 	
 
 # Login/Signup

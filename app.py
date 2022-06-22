@@ -57,8 +57,8 @@ def main():
     """A simple application"""
     html_temp = """
         <div style="background-color:#f02c0c;padding:10px;border-radius:10px">
-        <h1 style="color:#FFFFFF;text-align:center;">Smart Lander Application </h1>
-        </div>
+        <h1 style="color:#FFFFFF;text-align:center;">Smart Lander </h1>
+        <h2 style="color:#FFFFFF;text-align:center;">Application to predict the vertical forces undergone by a landing gear </h2>  </div>
         """
     st.markdown(html_temp.format('royalblue','white'),unsafe_allow_html=True)
 
@@ -84,23 +84,20 @@ def main():
                 #task = st.selectbox('Select Task',["predict vertical ground force on air ","predict verticalg round force on oil","Users Profile"])
                 #task = st.multiselect("Select a Task: ",["predict vertical ground force on air","predict verticalg round force on oil","Users Profile"])
                 #task = st.checkbox("Navigation",tasks)
-                task1 = st.checkbox("Predict vertical ground force on air")
-                task2 = st.checkbox("Predict vertical ground force on oil")
+                task1 = st.checkbox("Left vertical force on the ground air")
+                task2 = st.checkbox("Right vertical force on the ground air")
                 task3 = st.checkbox("Users Profile")
 
 
 
     #prediction for first model
-                #if task == "predict_TZ_AC_MLGL_air_max":
-                if task1: #== "predict vertical ground force on air":
-                    #st.checkbox(tasks)
-                    
         
     # input user
+                if task1:
 
-                    st.title("List of features")
+                    st.title("Enter your flight data")
                     st.write("""The user have to enter the features to have prediction
-                for verical ground force""")
+                                for verical ground force""")
 
     # function to user input
                     def user_input_features():
@@ -153,10 +150,10 @@ def main():
                     # save user input
                     #save_input = st.button("Save_input")
                     #if save_input == True:
-                    st.markdown('<h3>Features that you choose</h3>', unsafe_allow_html=True)
+                    st.markdown('<h3>Check the flight data</h3>', unsafe_allow_html=True)
                     st.write(input_df)
                 
-                    st.title("Vertical ground force on air")
+                    st.title("Left vertical force on the ground air")
                     
                     scaler_TZ_AC_MLGL_air_max= joblib.load(open("./scalers/scaler_TZ_AC_MLGL_air_max.save",'rb'))
                     df = pd.DataFrame(scaler_TZ_AC_MLGL_air_max.transform(input_df), columns = input_df.columns)
@@ -164,9 +161,9 @@ def main():
                     load_model_TZ_AC_MLGL_air_max = pickle.load(open('./models/model_TZ_AC_MLGL_air_max.pkl', 'rb'))
                 
         # use the model to predict target
-                    if st.button('predict verical ground force on air'):
+                    if st.button('predict Left verical force on the ground "air"'):
                         prediction = load_model_TZ_AC_MLGL_air_max.predict(df)
-                        st.success('value of TZ_AC_MLGL_air_max is {}'.format(prediction))
+                        st.success('Vertical ground "air" for main landing gear left is {}'.format(prediction))
 
         # convert result in csv
                                     
@@ -180,9 +177,9 @@ def main():
                         def convert_df_to_csv(result_mlgl):
                             return result_mlgl.to_csv().encode('utf-8')    
                         st.download_button(label="Download data as CSV",data = convert_df_to_csv(result_mlgl),
-                                                file_name='prediction_MLGL.csv',mime='text/csv')
+                                                file_name='prediction_TZ_MLGL.csv',mime='text/csv')
 
-                # prediction on loaded csv file
+        # prediction on loaded csv file
                 
                     #st.title("make prediction on  your own file")
                     #uploaded_file = st.file_uploader("Choose your file")
@@ -211,22 +208,22 @@ def main():
     #prediction for second model
 
                 if task2: 
-                    st.title("Vertical ground force on oil")
+                    st.title("Right vertical force on the ground air")
 
-                    scaler_TZ_AC_MLGR_lam_max= joblib.load(open("./scalers/scaler_TZ_AC_MLGR_lam_max.save",'rb'))
-                    df = pd.DataFrame(scaler_TZ_AC_MLGR_lam_max.transform(input_df), columns = input_df.columns)
+                    scaler_TZ_AC_MLGR_air_max= joblib.load(open("./scalers/scaler_TZ_AC_MLGR_air_max.save",'rb'))
+                    df = pd.DataFrame(scaler_TZ_AC_MLGR_air_max.transform(input_df), columns = input_df.columns)
 
             ## load the model file
-                    load_model_TZ_AC_MLGR_lam_max = pickle.load(open('./models/model_TZ_AC_MLGR_lam_max.pkl', 'rb'))
+                    load_model_TZ_AC_MLGR_air_max = pickle.load(open('./models/model_TZ_AC_MLGR_air_max.pkl', 'rb'))
                     
             # use the model to predict target
-                    if st.button('predict Vertical ground force on oil '):
-                        prediction = load_model_TZ_AC_MLGR_lam_max.predict(df)
-                        st.success('value of TZ_AC_MLGR_lam_max {}'.format(prediction))
+                    if st.button('predict Right vertical force on the ground "air" '):
+                        prediction = load_model_TZ_AC_MLGR_air_max.predict(df)
+                        st.success('Vertical ground force "air" of main lainding gear right{}'.format(prediction))
                         
             # Download result to csv file
                         prediction_MLGR = float(prediction)
-                        colonnes = ["TZ_AC_MLGR_lam_max"]
+                        colonnes = ["TZ_AC_MLGR_air_max"]
                         prediction_MLGR = pd.DataFrame(data = [[prediction_MLGR]], columns = colonnes )
                         
                         # concat choosen features and prediction to create dataframe
@@ -236,7 +233,7 @@ def main():
                             # IMPORTANT: Cache the conversion to prevent computation on every rerun
                             return result_mlgr.to_csv().encode('utf-8')    
                         st.download_button(label="Download data as CSV",data = convert_df_to_csv(result_mlgr),
-                                                file_name='prediction_MLGR.csv',mime='text/csv')
+                                                file_name='prediction_TZ_MLGR.csv',mime='text/csv')
 
                     
                    
